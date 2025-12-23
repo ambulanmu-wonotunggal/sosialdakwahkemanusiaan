@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Pengajuan Layanan – Mobil Layanan Umat</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #eef5ff;
+    margin: 0;
+    color: #14375b;
+  }
+
+  body:before {
+    content: "";
+    background: url("URL_ORNAMEN.png") center/380px no-repeat;
+    opacity: 0.05;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  header {
+    background: linear-gradient(135deg, #005cc5, #00a676);
+    color: white;
+    text-align: center;
+    padding: 55px 20px 80px;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  header img {
+    width: 120px;
+    margin-bottom: 18px;
+  }
+
+  header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: .5px;
+    line-height: 1.25;
+  }
+
+  header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 8px 0 0;
+  }
+
+  header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 4px 0 0;
+  }
+
+  .container {
+    max-width: 880px;
+    margin: -55px auto 35px;
+    padding: 0 18px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px 26px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.1);
+    border-top: 6px solid #00a676;
+    animation: fadeUp .45s ease;
+  }
+
+  @keyframes fadeUp {
+    from {transform: translateY(30px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+
+  label i {
+    margin-right: 6px;
+    color: #0070dd;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 11px;
+    border: 1.2px solid #cbe0ff;
+    border-radius: 8px;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    background: #f9fcff;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: #00a676;
+    outline: none;
+    box-shadow: 0 0 4px #77ecc4;
+  }
+
+  .btn {
+    width: 100%;
+    display: block;
+    background: linear-gradient(135deg, #0077ff, #00a676);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 18px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .3s;
+  }
+
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,153,255,0.3);
+  }
+
+  /* CHECKLIST STYLE */
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .checklist-item input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #8fc9ff;
+    border-radius: 6px;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .checklist-item input[type="checkbox"]:hover {
+    border-color: #00a676;
+    box-shadow: 0 0 5px rgba(0,166,118,0.4);
+  }
+
+  .checklist-item input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, #0077ff, #00a676);
+    border-color: transparent;
+  }
+
+  .checklist-item input[type="checkbox"]:checked::after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: white;
+    position: absolute;
+    top: 0; left: 3px;
+    font-size: 13px;
+  }
+
+  .checklist-item span {
+    margin-top: 1px;
+    line-height: 1.55;
+  }
+
+  .sponsor-title {
+    text-align: center;
+    font-weight: 700;
+    margin: 25px 0 8px;
+    color: #0e3f6b;
+  }
+
+  .sponsor-grid {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    text-align: center;
+  }
+
+  .sp-box {
+    background: white;
+    border: 1px solid #c9ddff;
+    border-radius: 10px;
+    padding: 10px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.25s ease;
+  }
+
+  .sp-box img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    opacity: .9;
+    transition: 0.25s ease;
+  }
+
+  .sp-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    border-color: #71cfff;
+  }
+
+  .sp-box:hover img {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  .popup-bg {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55);
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+
+  .popup-box {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+    max-width: 320px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  }
+
+  .popup-btn {
+    background: #0077ff;
+    color: white;
+    padding: 10px 14px;
+    margin: 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+  }
+
+  .popup-btn:hover {
+    background: #005fcc;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="URL_LOGO_MLU.png" alt="Logo MLU">
+
+  <h2>FORM PENGAJUAN LAYANAN</h2>
+  <h1>GIAT SOSIAL, KEMANUSIAAN & DAKWAH</h1>
+  <h3>Mobil Layanan Umat PCM Wonotunggal</h3>
+</header>
+
+<div class="container">
+  <div class="card">
+
+    <form id="formDakwah">
+
+      <label><i class="fa-solid fa-calendar-day"></i> Tanggal</label>
+      <input type="date" name="tanggal" id="tanggal" required>
+
+      <label><i class="fa-solid fa-sun"></i> Hari (otomatis)</label>
+      <input type="text" id="hari" readonly>
+ <label><i class="fa-solid fa-layer-group"></i> Kategori Layanan</label>
+      <select name="kategori_layanan" id="kategori_layanan" required>
+        <option value="">-- Pilih Kategori Layanan --</option>
+        <option value="Mobilisasi Dakwah">Mobilisasi Dakwah</option>
+        <option value="Mobilisasi Kemanusiaan">Mobilisasi Kemanusiaan</option>
+        <option value="Mobilisasi Sosial">Mobilisasi Sosial</option>
+      </select>
+
+<small id="infoKategori" style="color:#0e3f6b; display:block; margin-bottom:14px;"></small>
+
+      <label><i class="fa-solid fa-building"></i> Nama Lembaga</label>
+<select name="lembaga" id="lembaga" required>
+  <option value="">-- Pilih Nama Lembaga --</option>
+  <option value="PCM Wonotunggal">PCM Wonotunggal</option>
+  <option value="PCA Wonotunggal">PCA Wonotunggal</option>
+  <option value="PCPM Wonotunggal">PCPM Wonotunggal</option>
+  <option value="PCNA Wonotunggal">PCNA Wonotunggal</option>
+  <option value="KOKAM Wonotunggal">KOKAM Wonotunggal</option>
+  <option value="Lazismu">Lazismu</option>
+  <option value="MDMC">MDMC</option>
+  <option value="PRM Sodong">PRM Sodong</option>
+  <option value="Masjid KH. Ahmad Dahlan">Masjid KH. Ahmad Dahlan</option>
+  <option value="Media Center Karamel">Media Center Karamel</option>
+  <option value="Rema Ahmad Dahlan">Rema Ahmad Dahlan</option>
+  <option value="lainnya">Lainnya / Tulis Manual</option>
+</select>
+
+<div id="lembagaManualBox" style="display:none;">
+  <label><i class="fa-solid fa-pen"></i> Nama Lembaga / Pengguna (Manual)</label>
+  <input 
+    type="text"
+    name="lembaga_manual"
+    id="lembaga_manual"
+    placeholder="Tulis nama lembaga / pengguna">
+</div>   
+     
+      <label><i class="fa-solid fa-user"></i> Nama Pemohon</label>
+      <input type="text" name="pemohon" required>
+
+      <label><i class="fa-brands fa-whatsapp"></i> Nomor WhatsApp</label>
+      <input type="text" name="nowa" required placeholder="08xxxxxxxxxx">
+
+      <label><i class="fa-solid fa-bullhorn"></i> Keperluan / Kegiatan</label>
+      <input type="text" name="kegiatan" required>
+
+      <label><i class="fa-solid fa-users-line"></i> Penyelenggara Kegiatan</label>
+      <input type="text" name="penyelenggara" required>
+
+      <label><i class="fa-solid fa-location-dot"></i> Titik Pemberangkatan</label>
+      <input type="text" name="berangkat" required>
+
+      <label><i class="fa-solid fa-map-pin"></i> Tujuan</label>
+      <input type="text" name="tujuan" required>
+
+      <label><i class="fa-solid fa-clock"></i> Jam Berangkat</label>
+      <input type="time" name="jam" required>
+
+      <label><i class="fa-solid fa-hourglass-start"></i> Perkiraan Tiba</label>
+      <input type="time" name="tiba" required>
+
+      <label><i class="fa-solid fa-people-group"></i> Jumlah Penumpang</label>
+      <input type="number" name="penumpang" required>
+
+      <label><i class="fa-solid fa-clipboard-list"></i> Keterangan (opsional)</label>
+      <textarea name="keterangan" rows="3" placeholder="Opsional"></textarea>
+
+      <h3>Persetujuan</h3>
+
+<div class="checklist-item">
+  <input type="checkbox" required>
+  <span>Saya menyatakan data yang saya isi adalah benar dan dapat dipertanggungjawabkan.</span>
+</div>
+
+<div class="checklist-item">
+  <input type="checkbox" required>
+  <span>
+    Saya memahami bahwa layanan ini bersifat <b>non-medis</b> dan pelaksanaannya
+    menyesuaikan kondisi serta ketersediaan armada.
+  </span>
+</div>
+
+<div class="checklist-item">
+  <input type="checkbox" required>
+  <span>
+    Saya bersedia apabila jadwal layanan perlu disesuaikan atau dijadwalkan ulang
+    sesuai kondisi di lapangan.
+  </span>
+</div>
+
+      <button type="button" class="btn" id="btnPopup">KIRIM PENGAJUAN</button>
+
+      <div class="sponsor-title">Support by</div>
+      <div class="sponsor-grid">
+        <div class="sp-box"><img src="URL_LOGO_1.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_2.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_3.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_4.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_5.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_6.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_7.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_8.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_9.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_10.png"></div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div class="popup-bg" id="popup">
+  <div class="popup-box">
+    <h3>Data sudah benar?</h3>
+    <p>Pastikan semua data sudah sesuai sebelum dikirim.</p>
+  <p style="font-size:14px; line-height:1.5; margin-top:10px;">
+    Jika data pengajuan sudah benar, data akan langsung diteruskan ke
+    <b>WhatsApp Call Center Mobil Layanan Umat</b>.
+    Setelah WhatsApp terbuka, silakan klik kirim untuk menyelesaikan pengajuan.
+  </p>
+
+    <button class="popup-btn" id="confirmSend">Ya, kirim</button>
+    <button class="popup-btn" onclick="document.getElementById('popup').style.display='none'">Cek lagi</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('tanggal').addEventListener('change', function(){
+    const d = new Date(this.value);
+    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    document.getElementById('hari').value = hari[d.getDay()];
+  });
+
+  document.getElementById('btnPopup').addEventListener('click', function(){
+    document.getElementById('popup').style.display = 'flex';
+  });
+
+  document.getElementById('confirmSend').addEventListener('click', function(){
+    let f = new FormData(document.getElementById('formDakwah'));
+    let jadwal = document.getElementById("jadwalUlang").checked 
+      ? "✅ Siap dijadwalkan ulang."
+      : "⚠ Tidak bersedia dijadwalkan ulang.";
+
+    let pesan =
+      `*FORM PENGAJUAN LAYANAN – MOBILISASI DAKWAH*%0A%0A` +
+      `Tanggal: ${f.get('tanggal')} (${document.getElementById('hari').value})%0A` +
+      `Lembaga: ${f.get('lembaga')}%0A` +
+      `Pemohon: ${f.get('pemohon')}%0A` +
+      `WA: ${f.get('nowa')}%0A` +
+      `Kegiatan: ${f.get('kegiatan')}%0A` +
+      `Penyelenggara: ${f.get('penyelenggara')}%0A` +
+      `Berangkat dari: ${f.get('berangkat')}%0A` +
+      `Tujuan: ${f.get('tujuan')}%0A` +
+      `Jam Berangkat: ${f.get('jam')}%0A` +
+      `Perkiraan Tiba: ${f.get('tiba')}%0A` +
+      `Penumpang: ${f.get('penumpang')} orang%0A` +
+      `Keterangan: ${f.get('keterangan') || '-'}%0A%0A` +
+      `${jadwal}`;
+
+    document.getElementById('popup').style.display = 'none';
+    window.open(`https://wa.me/6285293851141?text=${pesan}`, "_blank");
+  });
+</script>
+  // accessibility
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') confirmPopup.classList.remove('show'); });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const lembaga = document.getElementById("lembaga");
+  const box = document.getElementById("lembagaManualBox");
+  const input = document.getElementById("lembaga_manual");
+
+  lembaga.addEventListener("change", function () {
+    if (this.value === "lainnya") {
+      box.style.display = "block";
+      input.required = true;
+    } else {
+      box.style.display = "none";
+      input.required = false;
+      input.value = "";
+    }
+  });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const kategori = document.getElementById("kategori_layanan");
+  const info = document.getElementById("infoKategori");
+
+  kategori.addEventListener("change", function () {
+    if (this.value === "Mobilisasi Dakwah") {
+      info.innerText = "Digunakan untuk rapat, kegiatan organisasi, pengajian, dan aktivitas dakwah.";
+    } 
+    else if (this.value === "Mobilisasi Kemanusiaan") {
+      info.innerText = "Digunakan untuk respon bencana, respon darurat, distribusi logistik, dan mitigasi.";
+    } 
+    else if (this.value === "Mobilisasi Sosial") {
+      info.innerText = "Digunakan untuk kegiatan sosial non-medis seperti penyaluran bantuan, silaturahmi, jenguk orang sakit, dan layanan umat lainnya.";
+    } 
+    else {
+      info.innerText = "";
+    }
+  });
+});
+</script>
+<script>
+document.getElementById("btnPopup").addEventListener("click", function () {
+  const form = document.getElementById("formPengajuan");
+
+  if (form.checkValidity()) {
+    document.getElementById("popupKonfirmasi").style.display = "block";
+  } else {
+    form.reportValidity();
+  }
+});
+</script>
+
+</body>
+</html>
