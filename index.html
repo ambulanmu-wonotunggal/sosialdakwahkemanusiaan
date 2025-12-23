@@ -328,7 +328,7 @@
       <input type="time" name="tiba" required>
 
       <label><i class="fa-solid fa-people-group"></i> Jumlah Penumpang</label>
-      <input type="number" name="penumpang" required>
+      <input type="number" name="penumpang" min="1" max="7" required>
 
       <label><i class="fa-solid fa-clipboard-list"></i> Keterangan (opsional)</label>
       <textarea name="keterangan" rows="3" placeholder="Opsional"></textarea>
@@ -491,3 +491,4 @@ document.getElementById("btnPopup").addEventListener("click", function () {
 
 </body>
 </html>
+
