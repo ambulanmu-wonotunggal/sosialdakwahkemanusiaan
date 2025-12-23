@@ -398,10 +398,15 @@
     document.getElementById('hari').value = hari[d.getDay()];
   });
 
-  document.getElementById('btnPopup').addEventListener('click', function(){
-    document.getElementById('popup').style.display = 'flex';
-  });
+document.getElementById('confirmSend').addEventListener('click', function(){
+  const form = document.getElementById("formDakwah");
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
 
+  let f = new FormData(form);
+  });
   document.getElementById('confirmSend').addEventListener('click', function(){
     let f = new FormData(document.getElementById('formDakwah'));
     let jadwal = document.getElementById("jadwalUlang").checked 
@@ -471,15 +476,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script>
+
 document.getElementById("btnPopup").addEventListener("click", function () {
-  const form = document.getElementById("formPengajuan");
+  const form = document.getElementById("formDakwah");
 
   if (form.checkValidity()) {
-    document.getElementById("popupKonfirmasi").style.display = "block";
+    document.getElementById("popup").style.display = "flex";
   } else {
     form.reportValidity();
   }
 });
+
 </script>
 
 </body>
