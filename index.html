@@ -447,45 +447,33 @@ document.getElementById("confirmSend").addEventListener("click", function () {
   const pesan =
 `FORM PENGAJUAN LAYANAN
 Mobil Layanan Umat PCM Wonotunggal
-
 ━━━━━━━━━━━━━━━━
 KATEGORI LAYANAN
 ${data.kategori}
 ━━━━━━━━━━━━━━━━
+Hari / Tanggal : ${data.hari}, ${data.tanggal}
 
-🗓 Hari / Tanggal
-${data.hari}, ${data.tanggal}
+Nama Lembaga / Pengguna : ${data.lembaga}
+Nama Pemohon : ${data.pemohon}
+No. WhatsApp : ${data.nowa}
 
-🏢 Nama Lembaga
-${data.lembaga}
+Penyelenggara Kegiatan : ${data.penyelenggara}
+Keperluan / Kegiatan : ${data.kegiatan}
 
-👤 Nama Pemohon
-${data.pemohon}
-📞 No. WhatsApp
-${data.nowa}
+Rute Perjalanan
+• Titik Jemput : ${data.berangkat}
+• Tujuan       : ${data.tujuan}
 
-🏷 Penyelenggara Kegiatan
-${data.penyelenggara}
+Waktu
+• Jam Berangkat  : ${data.jam}
+• Perkiraan Tiba : ${data.tiba}
 
-📋 Keperluan / Kegiatan
-${data.kegiatan}
-
-📍 Rute Perjalanan
-• Berangkat : ${data.berangkat}
-• Tujuan    : ${data.tujuan}
-
-⏰ Waktu
-• Jam Berangkat : ${data.jam}
-• Perkiraan Tiba: ${data.tiba}
-
-👥 Jumlah Penumpang
-${data.penumpang} orang
-
-📝 Keterangan
+Jumlah Penumpang : ${data.penumpang}
+Keterangan :
 ${data.keterangan || "-"}
 
 ━━━━━━━━━━━━━━━━
-✅ PERNYATAAN PERSETUJUAN
+*PERNYATAAN PERSETUJUAN*
 Saya menyatakan bahwa data yang saya isikan adalah benar
 dan saya menyetujui syarat serta ketentuan layanan
 Mobil Layanan Umat PCM Wonotunggal.
