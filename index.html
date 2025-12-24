@@ -441,17 +441,29 @@ fetch("https://script.google.com/macros/s/AKfycbw5-lca7c3ySvjWSRa7ufhy2zraVhm6sX
   method: "POST",
   body: new URLSearchParams(data)
 });
+function formatTanggalIndo(tgl) {
+  const bulan = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
 
+  const d = new Date(tgl);
+  const tanggal = d.getDate();
+  const namaBulan = bulan[d.getMonth()];
+  const tahun = d.getFullYear();
+
+  return `${tanggal} ${namaBulan} ${tahun}`;
+}
 
   // whatsapp
   const pesan =
-`*FORM PENGAJUAN LAYANAN*
-*Mobil Layanan Umat PCM Wonotunggal*
+`FORM PENGAJUAN LAYANAN
+Mobil Layanan Umat PCM Wonotunggal
 ━━━━━━━━━━━━━━━━
 KATEGORI LAYANAN
 ${data.kategori}
 ━━━━━━━━━━━━━━━━
-Hari / Tanggal : ${data.hari}, ${data.tanggal}
+Hari / Tanggal : ${data.hari}, ${formatTanggalIndo(data.tanggal)}
 
 Nama Lembaga / Pengguna : ${data.lembaga}
 Nama Pemohon : ${data.pemohon}
@@ -537,4 +549,3 @@ document.getElementById("kategori_layanan").addEventListener("change", function 
 
 </body>
 </html>
-
