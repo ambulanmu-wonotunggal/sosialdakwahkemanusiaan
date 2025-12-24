@@ -390,97 +390,17 @@
     <button class="popup-btn" onclick="document.getElementById('popup').style.display='none'">Cek lagi</button>
   </div>
 </div>
-
 <script>
-  document.getElementById('tanggal').addEventListener('change', function(){
-    const d = new Date(this.value);
-    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-    document.getElementById('hari').value = hari[d.getDay()];
-  });
-
-document.getElementById('confirmSend').addEventListener('click', function(){
-  const form = document.getElementById("formDakwah");
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
-  let f = new FormData(form);
-  });
-  document.getElementById('confirmSend').addEventListener('click', function(){
-    let f = new FormData(document.getElementById('formDakwah'));
-    let jadwal = document.getElementById("jadwalUlang").checked 
-      ? "✅ Siap dijadwalkan ulang."
-      : "⚠ Tidak bersedia dijadwalkan ulang.";
-
-    let pesan =
-      `*FORM PENGAJUAN LAYANAN – MOBILISASI DAKWAH*%0A%0A` +
-      `Tanggal: ${f.get('tanggal')} (${document.getElementById('hari').value})%0A` +
-      `Lembaga: ${f.get('lembaga')}%0A` +
-      `Pemohon: ${f.get('pemohon')}%0A` +
-      `WA: ${f.get('nowa')}%0A` +
-      `Kegiatan: ${f.get('kegiatan')}%0A` +
-      `Penyelenggara: ${f.get('penyelenggara')}%0A` +
-      `Berangkat dari: ${f.get('berangkat')}%0A` +
-      `Tujuan: ${f.get('tujuan')}%0A` +
-      `Jam Berangkat: ${f.get('jam')}%0A` +
-      `Perkiraan Tiba: ${f.get('tiba')}%0A` +
-      `Penumpang: ${f.get('penumpang')} orang%0A` +
-      `Keterangan: ${f.get('keterangan') || '-'}%0A%0A` +
-      `${jadwal}`;
-
-    document.getElementById('popup').style.display = 'none';
-    window.open(`https://wa.me/6285293851141?text=${pesan}`, "_blank");
-  });
-</script>
-<script>
-  // accessibility
-  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') confirmPopup.classList.remove('show'); });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const lembaga = document.getElementById("lembaga");
-  const box = document.getElementById("lembagaManualBox");
-  const input = document.getElementById("lembaga_manual");
-
-  lembaga.addEventListener("change", function () {
-    if (this.value === "lainnya") {
-      box.style.display = "block";
-      input.required = true;
-    } else {
-      box.style.display = "none";
-      input.required = false;
-      input.value = "";
-    }
-  });
+// auto hari
+document.getElementById('tanggal').addEventListener('change', function(){
+  const d = new Date(this.value);
+  const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  document.getElementById('hari').value = hari[d.getDay()];
 });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const kategori = document.getElementById("kategori_layanan");
-  const info = document.getElementById("infoKategori");
 
-  kategori.addEventListener("change", function () {
-    if (this.value === "Mobilisasi Dakwah") {
-      info.innerText = "Digunakan untuk rapat, kegiatan organisasi, pengajian, dan aktivitas dakwah.";
-    } 
-    else if (this.value === "Mobilisasi Kemanusiaan") {
-      info.innerText = "Digunakan untuk respon bencana, respon darurat, distribusi logistik, dan mitigasi.";
-    } 
-    else if (this.value === "Mobilisasi Sosial") {
-      info.innerText = "Digunakan untuk kegiatan sosial non-medis seperti penyaluran bantuan, silaturahmi, jenguk orang sakit, dan layanan umat lainnya.";
-    } 
-    else {
-      info.innerText = "";
-    }
-  });
-});
-</script>
-<script>
-
+// tombol kirim → popup
 document.getElementById("btnPopup").addEventListener("click", function () {
   const form = document.getElementById("formDakwah");
-
   if (form.checkValidity()) {
     document.getElementById("popup").style.display = "flex";
   } else {
@@ -488,9 +408,91 @@ document.getElementById("btnPopup").addEventListener("click", function () {
   }
 });
 
+// konfirmasi kirim
+document.getElementById("confirmSend").addEventListener("click", function () {
+
+  const form = document.getElementById("formDakwah");
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  const f = new FormData(form);
+
+  const data = {
+    kategori: f.get("kategori_layanan"),
+    hari: document.getElementById("hari").value,
+    tanggal: f.get("tanggal"),
+    lembaga: f.get("lembaga_manual") || f.get("lembaga"),
+    pemohon: f.get("pemohon"),
+    nowa: f.get("nowa"),
+    kegiatan: f.get("kegiatan"),
+    penyelenggara: f.get("penyelenggara"),
+    berangkat: f.get("berangkat"),
+    tujuan: f.get("tujuan"),
+    jam: f.get("jam"),
+    tiba: f.get("tiba"),
+    penumpang: f.get("penumpang"),
+    keterangan: f.get("keterangan")
+  };
+
+  // kirim ke sheet (background)
+  fetch("https://script.google.com/macros/s/AKfycbw6vBA0bWFpAON3aM1VVuTYSNgrFMAdfiIeNcjpey-jQ5J2PxfpAtmRBlU9L47jPtk3/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  }).catch(() => console.log("Gagal simpan ke Sheet"));
+
+  // whatsapp
+  const pesan =
+`FORM PENGAJUAN LAYANAN
+Mobil Layanan Umat PCM Wonotunggal
+
+[ ${data.kategori.toUpperCase()} ]
+
+Hari : ${data.hari}
+Tanggal : ${data.tanggal}
+
+Nama Lembaga : ${data.lembaga}
+Nama Pemohon : ${data.pemohon}
+Penyelenggara : ${data.penyelenggara}
+Keperluan : ${data.kegiatan}
+Berangkat : ${data.berangkat}
+Tujuan : ${data.tujuan}
+Jam : ${data.jam}
+Perkiraan Tiba : ${data.tiba}
+Penumpang : ${data.penumpang}
+Keterangan : ${data.keterangan || "-"}`;
+
+  window.open(
+    "https://wa.me/6285117803676?text=" + encodeURIComponent(pesan),
+    "_blank"
+  );
+
+  document.getElementById("popup").style.display = "none";
+});
+
+// lembaga manual
+document.getElementById("lembaga").addEventListener("change", function () {
+  const box = document.getElementById("lembagaManualBox");
+  const input = document.getElementById("lembaga_manual");
+  if (this.value === "lainnya") {
+    box.style.display = "block";
+    input.required = true;
+  } else {
+    box.style.display = "none";
+    input.required = false;
+    input.value = "";
+  }
+});
+
+// escape popup
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.getElementById('popup').style.display = 'none';
+  }
+});
 </script>
 
 </body>
 </html>
-
-
