@@ -437,11 +437,11 @@ document.getElementById("confirmSend").addEventListener("click", function () {
   };
 
   // kirim ke sheet (background)
-  fetch("https://script.google.com/macros/s/AKfycbw_vSyBJ3F8KIbbksW8VMii0SrGzjxPOXU8MPWivB-sZjpDKQ4DNHZRxNtXPUzY-QoH/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
-  }).catch(() => console.log("Gagal simpan ke Sheet"));
+fetch("https://script.google.com/macros/s/AKfycbw5-lca7c3ySvjWSRa7ufhy2zraVhm6sXm6Fv1ppLtPK_AH4an9G_7fK7pfDBNfaNcz/exec", {
+  method: "POST",
+  body: new URLSearchParams(data)
+});
+
 
   // whatsapp
   const pesan =
