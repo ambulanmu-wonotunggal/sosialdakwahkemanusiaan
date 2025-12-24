@@ -437,7 +437,7 @@ document.getElementById("confirmSend").addEventListener("click", function () {
   };
 
   // kirim ke sheet (background)
-  fetch("https://script.google.com/macros/s/AKfycbw6vBA0bWFpAON3aM1VVuTYSNgrFMAdfiIeNcjpey-jQ5J2PxfpAtmRBlU9L47jPtk3/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbw_vSyBJ3F8KIbbksW8VMii0SrGzjxPOXU8MPWivB-sZjpDKQ4DNHZRxNtXPUzY-QoH/exec", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
@@ -448,21 +448,48 @@ document.getElementById("confirmSend").addEventListener("click", function () {
 `FORM PENGAJUAN LAYANAN
 Mobil Layanan Umat PCM Wonotunggal
 
-[ ${data.kategori.toUpperCase()} ]
+━━━━━━━━━━━━━━━━
+KATEGORI LAYANAN
+${data.kategori}
+━━━━━━━━━━━━━━━━
 
-Hari : ${data.hari}
-Tanggal : ${data.tanggal}
+🗓 Hari / Tanggal
+${data.hari}, ${data.tanggal}
 
-Nama Lembaga : ${data.lembaga}
-Nama Pemohon : ${data.pemohon}
-Penyelenggara : ${data.penyelenggara}
-Keperluan : ${data.kegiatan}
-Berangkat : ${data.berangkat}
-Tujuan : ${data.tujuan}
-Jam : ${data.jam}
-Perkiraan Tiba : ${data.tiba}
-Penumpang : ${data.penumpang}
-Keterangan : ${data.keterangan || "-"}`;
+🏢 Nama Lembaga
+${data.lembaga}
+
+👤 Nama Pemohon
+${data.pemohon}
+📞 No. WhatsApp
+${data.nowa}
+
+🏷 Penyelenggara Kegiatan
+${data.penyelenggara}
+
+📋 Keperluan / Kegiatan
+${data.kegiatan}
+
+📍 Rute Perjalanan
+• Berangkat : ${data.berangkat}
+• Tujuan    : ${data.tujuan}
+
+⏰ Waktu
+• Jam Berangkat : ${data.jam}
+• Perkiraan Tiba: ${data.tiba}
+
+👥 Jumlah Penumpang
+${data.penumpang} orang
+
+📝 Keterangan
+${data.keterangan || "-"}
+
+━━━━━━━━━━━━━━━━
+✅ PERNYATAAN PERSETUJUAN
+Saya menyatakan bahwa data yang saya isikan adalah benar
+dan saya menyetujui syarat serta ketentuan layanan
+Mobil Layanan Umat PCM Wonotunggal.
+━━━━━━━━━━━━━━━━`;
 
   window.open(
     "https://wa.me/6285117803676?text=" + encodeURIComponent(pesan),
