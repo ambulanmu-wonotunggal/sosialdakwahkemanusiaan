@@ -508,6 +508,32 @@ window.addEventListener('keydown', (e) => {
   }
 });
 </script>
+<script>
+// deskripsi kategori layanan
+document.getElementById("kategori_layanan").addEventListener("change", function () {
+  const info = document.getElementById("infoKategori");
+
+  if (this.value === "Mobilisasi Dakwah") {
+    info.innerText =
+      "Mobilisasi Dakwah digunakan untuk rapat organisasi, pengajian, dan kegiatan dakwah Muhammadiyah.";
+    info.style.display = "block";
+  } 
+  else if (this.value === "Mobilisasi Kemanusiaan") {
+    info.innerText =
+      "Mobilisasi Kemanusiaan digunakan untuk respon bencana, respon darurat, distribusi logistik, dan mitigasi.";
+    info.style.display = "block";
+  } 
+  else if (this.value === "Mobilisasi Sosial") {
+    info.innerText =
+      "Mobilisasi Sosial digunakan untuk kegiatan sosial non-medis seperti penyaluran bantuan, silaturahmi, jenguk orang sakit, dan layanan umat.";
+    info.style.display = "block";
+  } 
+  else {
+    info.style.display = "none";
+    info.innerText = "";
+  }
+});
+</script>
 
 </body>
 </html>
