@@ -174,30 +174,28 @@
   }
 
   .sponsor-grid {
-    margin-top: 8px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    text-align: center;
-  }
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 
-  .sp-box {
-    background: white;
-    border: 1px solid #c9ddff;
-    border-radius: 10px;
-    padding: 10px 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: 0.25s ease;
-  }
+.sp-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  height: 70px;
 
-  .sp-box img {
-    width: 55px;
-    height: 55px;
-    object-fit: contain;
-    opacity: .9;
-    transition: 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.sp-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   }
 
   .sp-box:hover {
@@ -369,7 +367,6 @@
         <div class="sp-box"><img src="URL_LOGO_7.png"></div>
         <div class="sp-box"><img src="URL_LOGO_8.png"></div>
         <div class="sp-box"><img src="URL_LOGO_9.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_10.png"></div>
       </div>
 
     </form>
@@ -456,39 +453,43 @@ function formatTanggalIndo(tgl) {
 }
 
   // whatsapp
-  const pesan =
-`*FORM PENGAJUAN LAYANAN*
-*Mobil Layanan Umat PCM Wonotunggal*
-━━━━━━━━━━━━━━━━
-KATEGORI LAYANAN
-*${data.kategori}*
-━━━━━━━━━━━━━━━━
-Hari / Tanggal : *${data.hari}, ${formatTanggalIndo(data.tanggal)}*
+const lines = [
+  '*FORM PERMOHONAN LAYANAN*',
+  '*Mobil Layanan Umat Pimpinan Cabang*',
+  '*Muhammadiyah Wonotunggal*',
+  '━━━━━━━━━━━━━━━━━━',
+  `*Kategori Layanan :* *${payload.kategori}*`,
+  '━━━━━━━━━━━━━━━━━━',
+  `*Hari / Tanggal   :* *${payload.hari}, ${formatTanggalIndo(payload.tanggal)}*`,
+  '━━━━━━━━━━━━━━━━━━',
+  '*DATA PENGAJUAN*',
+  '```',
+  `Nama Lembaga / Pengguna : ${payload.lembaga}`,
+  `Nama Pemohon           : ${payload.pemohon}`,
+  `No. WhatsApp           : ${payload.nowa}`,
+  `Penyelenggara Kegiatan : ${payload.penyelenggara}`,
+  `Keperluan / Kegiatan   : ${payload.kegiatan}`,
+  `Jumlah Penumpang : ${payload.penumpang}`,
+  '```',
 
-Nama Lembaga / Pengguna : *${data.lembaga}*
-Nama Pemohon : *${data.pemohon}*
-No. WhatsApp : *${data.nowa}*
+  '*RUTE & WAKTU*',
+  '```',
+  `Titik Jemput     : ${payload.berangkat}`,
+  `Tujuan          : ${payload.tujuan}`,
+  `Jam Berangkat   : ${payload.jam}`,
+  `Perkiraan Tiba  : ${payload.tiba}`,
+  '```',
+  '```',
+  `Keterangan       : ${payload.keterangan || '-'}`,
+  '```',
 
-Penyelenggara Kegiatan : *${data.penyelenggara}*
-Keperluan / Kegiatan : *${data.kegiatan}*
-
-Rute Perjalanan
-• *Titik Jemput :* *${data.berangkat}*
-• *Tujuan       :* *${data.tujuan}*
-Waktu
-• *Jam Berangkat  :* *${data.jam}*
-• *Perkiraan Tiba :* *${data.tiba}*
-
-Jumlah Penumpang : *${data.penumpang}*
-Keterangan :
-*${data.keterangan || "-"}*
-
-━━━━━━━━━━━━━━━━
-*PERNYATAAN PERSETUJUAN*
-Saya menyatakan bahwa data yang saya isikan adalah benar
-dan saya menyetujui syarat serta ketentuan layanan
-Mobil Layanan Umat PCM Wonotunggal.
-━━━━━━━━━━━━━━━━`;
+  '━━━━━━━━━━━━━━━━━━',
+  '*PERNYATAAN PERSETUJUAN*',
+  'Saya menyatakan bahwa data yang saya isikan adalah benar dan saya menyetujui syarat serta ketentuan layanan Mobil Layanan Umat PCM Wonotunggal.',
+  '---------',
+  '_Pesan ini dikirim otomatis melalui sistem_',
+  '_Mobil Layanan Umat PCM Wonotunggal_'
+];
 
   window.open(
     "https://wa.me/6285117803676?text=" + encodeURIComponent(pesan),
