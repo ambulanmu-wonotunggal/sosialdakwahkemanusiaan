@@ -166,17 +166,81 @@
     line-height: 1.55;
   }
 
-  .sponsor-title {
-    text-align: center;
-    font-weight: 700;
-    margin: 25px 0 8px;
-    color: #0e3f6b;
-  }
+.sponsor-title {
+  text-align: center;
+  font-weight: 600;
+  margin: 24px 0 12px;
+  letter-spacing: 0.5px;
+}
 
-  .sponsor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-  gap: 12px;
+.sponsor-grid {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  overflow: hidden;
+  position: relative;
+}
+
+.sponsor-grid::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+.sponsor-grid::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(to right, #fff, transparent);
+  z-index: 1;
+}
+
+.sp-box {
+  flex: 0 0 auto;
+  animation: sponsor-scroll 30s linear infinite;
+}
+
+.sponsor-grid:hover .sp-box {
+  animation-play-state: paused;
+}
+
+.sp-box img {
+  height: 55px;
+  max-width: 140px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.85;
+  transition: all 0.3s ease;
+}
+
+.sp-box img:hover {
+  filter: grayscale(0%);
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sp-box img {
+    height: 42px;
+    max-width: 110px;
+  }
+}
+
+@keyframes sponsor-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-1200px);
+  }
 }
 
 .sp-box {
@@ -191,7 +255,6 @@
   max-height: 80%;
   object-fit: contain;
 }
-
   .sp-box:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.12);
@@ -237,6 +300,21 @@
   .popup-btn:hover {
     background: #005fcc;
   }
+.agreement {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.pedoman-link a {
+  font-size: 13px;
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.pedoman-link a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -258,7 +336,7 @@
       <input type="date" name="tanggal" id="tanggal" required>
 
       <label><i class="fa-solid fa-sun"></i> Hari (otomatis)</label>
-      <input type="text" id="hari" readonly>
+      <input type="text" id="hari" placeholder="otomatis" readonly>
  <label><i class="fa-solid fa-layer-group"></i> Kategori Layanan</label>
       <select name="kategori_layanan" id="kategori_layanan" required>
         <option value="">-- Pilih Kategori Layanan --</option>
@@ -267,7 +345,7 @@
         <option value="Mobilisasi Sosial">Mobilisasi Sosial</option>
       </select>
 <label><i class="fa-solid fa-id-card"></i> ID Permohonan</label>
-<input type="text" id="id_permohonan" name="id_permohonan" readonly>
+<input type="text" id="id_permohonan" name="id_permohonan" placeholder="otomatis" readonly>
 
 <small id="infoKategori" style="color:#0e3f6b; display:block; margin-bottom:14px;"></small>
 
@@ -301,10 +379,10 @@
       <input type="text" name="pemohon" required>
 
       <label><i class="fa-brands fa-whatsapp"></i> Nomor WhatsApp</label>
-      <input type="text" name="nowa" required placeholder="08xxxxxxxxxx">
+      <input type="number" name="nowa" required placeholder="contoh : 6281234567891">
 
       <label><i class="fa-solid fa-bullhorn"></i> Keperluan / Kegiatan</label>
-      <input type="text" name="kegiatan" required>
+      <input type="text" name="kegiatan" placeholder="tulis keperluan atau kegiatan secara jelas" required>
 
       <label><i class="fa-solid fa-users-line"></i> Penyelenggara Kegiatan</label>
       <input type="text" name="penyelenggara" required>
@@ -318,14 +396,14 @@
       <label><i class="fa-solid fa-clock"></i> Jam Berangkat</label>
       <input type="time" name="jam" required>
 
-      <label><i class="fa-solid fa-hourglass-start"></i> Perkiraan Tiba</label>
+      <label><i class="fa-solid fa-hourglass-start"></i> Tiba di tujuan</label>
       <input type="time" name="tiba" required>
 
       <label><i class="fa-solid fa-people-group"></i> Jumlah Penumpang</label>
-      <input type="number" name="penumpang" required>
+      <input type="number" name="penumpang" min="1" max= "7" placeholder="max 7 orang, jika lebih tulis di keterangan" required>
 
       <label><i class="fa-solid fa-clipboard-list"></i> Keterangan (opsional)</label>
-      <textarea name="keterangan" rows="3" placeholder="Opsional"></textarea>
+      <textarea name="keterangan" rows="3" placeholder="misal : harap menunggu sampai selesai"></textarea>
 
       <h3>Persetujuan</h3>
 
@@ -349,25 +427,44 @@
     sesuai kondisi di lapangan.
   </span>
 </div>
+<div class="pedoman-link">
+  <a href="https://s.id/pedomanmobillayananmu"
+     target="_blank"
+     rel="noopener">
+    📄 Baca Pedoman Layanan Mobil Layanan Umat
+  </a>
+</div>
+
 
       <button type="button" class="btn" id="btnPopup">KIRIM PENGAJUAN</button>
 
-      <div class="sponsor-title">Support by</div>
-      <div class="sponsor-grid">
-        <div class="sp-box"><img src="URL_LOGO_1.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_2.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_3.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_4.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_5.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_6.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_7.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_8.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_9.png"></div>
-        <div class="sp-box"><img src="URL_LOGO_10.png"></div>
-      </div>
+  <div class="sponsor-title">Support by</div>
 
-    </form>
-  </div>
+<div class="sponsor-grid">
+
+  <!-- SET ASLI -->
+  <div class="sp-box"><img src="URL_LOGO_1.png" alt="Sponsor 1"></div>
+  <div class="sp-box"><img src="URL_LOGO_2.png" alt="Sponsor 2"></div>
+  <div class="sp-box"><img src="URL_LOGO_3.png" alt="Sponsor 3"></div>
+  <div class="sp-box"><img src="URL_LOGO_4.png" alt="Sponsor 4"></div>
+  <div class="sp-box"><img src="URL_LOGO_5.png" alt="Sponsor 5"></div>
+  <div class="sp-box"><img src="URL_LOGO_6.png" alt="Sponsor 6"></div>
+  <div class="sp-box"><img src="URL_LOGO_7.png" alt="Sponsor 7"></div>
+  <div class="sp-box"><img src="URL_LOGO_8.png" alt="Sponsor 8"></div>
+  <div class="sp-box"><img src="URL_LOGO_9.png" alt="Sponsor 9"></div>
+  <div class="sp-box"><img src="URL_LOGO_10.png" alt="Sponsor 10"></div>
+
+  <!-- DUPLIKAT UNTUK INFINITE LOOP -->
+  <div class="sp-box"><img src="URL_LOGO_1.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_2.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_3.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_4.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_5.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_6.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_7.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_8.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_9.png" alt=""></div>
+  <div class="sp-box"><img src="URL_LOGO_10.png" alt=""></div>
 </div>
 
 <div class="popup-bg" id="popup">
@@ -390,28 +487,30 @@ let isSubmitting = false;
 
 function formatTanggalIndonesia(dateString) {
   const bulan = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    'Januari','Februari','Maret','April','Mei','Juni',
+    'Juli','Agustus','September','Oktober','November','Desember'
   ];
-  const [year, month, day] = dateString.split('-');
-  return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year}`;
+  const [y,m,d] = dateString.split('-');
+  return `${parseInt(d)} ${bulan[m-1]} ${y}`;
 }
 
 document.getElementById('confirmSend').addEventListener('click', handleConfirmSend);
 
-async function handleConfirmSend() {
+function handleConfirmSend() {
 
-  if (isSubmitting) return; // ⛔ cegah klik ganda
+  if (isSubmitting) return;
   isSubmitting = true;
 
   const btn = document.getElementById('confirmSend');
   btn.disabled = true;
+  btn.innerText = 'Mengirim...';
 
   const form = document.getElementById('formDakwah');
   if (!form.checkValidity()) {
     form.reportValidity();
     isSubmitting = false;
     btn.disabled = false;
+    btn.innerText = 'Kirim';
     return;
   }
 
@@ -436,67 +535,43 @@ async function handleConfirmSend() {
   };
 
   /* =========================
-     1. KIRIM KE GOOGLE SHEET
-     ========================= */
-  try {
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycby_5GCjzYOy7vxuKb25tvPr953IQsGCIakNJfhbx3fDnIB3A76adK9QxXNr2WZIuWN4/exec",
-      {
-        method: "POST",
-        body: JSON.stringify(payload)
-      }
-    );
-
-    const json = await res.json();
-    if (json.status !== 'success') throw new Error();
-
-  } catch (e) {
-    alert('Gagal menyimpan data.');
-    isSubmitting = false;
-    btn.disabled = false;
-    return;
-  }
-
-  /* =========================
-     2. BARU BUKA WHATSAPP
+     1. BUKA WHATSAPP (INSTANT)
      ========================= */
   const lines = [
-  '*FORM PERMOHONAN LAYANAN*',
-  '*Mobil Layanan Umat Pimpinan Cabang*',
-  '*Muhammadiyah Wonotunggal*',
-  '━━━━━━━━━━━━━━━━━━',
-  `ID Permohonan : *${payload.id_permohonan}*`,
-  `Kategori Layanan : *${payload.kategori}*`,
-  '━━━━━━━━━━━━━━━━━━',
-  `Hari / Tanggal : *${payload.hari}, ${payload.tanggal}*`,
-  '',
-  '*DATA PENGGUNA*',
-  '```',
-  `Lembaga/Pengguna : ${payload.lembaga}`,
-  `Nama Pemohon     : ${payload.pemohon}`,
-  `No. WhatsApp     : ${payload.wa}`,
-  `Penyelenggara    : ${payload.penyelenggara}`,
-  `Keperluan        : ${payload.kegiatan}`,
-  `Jumlah Penumpang : ${payload.penumpang}`,
-  '```',
-  '',
-  '*RUTE & WAKTU*',
-  '```',
-  `Titik Jemput   : ${payload.berangkat}`,
-  `Tujuan         : ${payload.tujuan}`,
-  `Jam Berangkat  : ${payload.jam}`,
-  `Tiba           : ${payload.tiba}`,
-  `Keterangan     : ${payload.keterangan}`,
-  '```',
-  '━━━━━━━━━━━━━━━━━━',
-  '*PERNYATAAN PERSETUJUAN*',
-  'Saya menyatakan bahwa data yang saya isikan adalah benar dan saya menyetujui syarat serta ketentuan layanan Mobil Layanan Umat PCM Wonotunggal.',
-  '---------',
-  '_Pesan ini dikirim otomatis melalui sistem_',
-  '_Mobil Layanan Umat PCM Wonotunggal_'
-];
-
-  document.getElementById('popup').style.display = 'none';
+    '*FORM PERMOHONAN LAYANAN*',
+    '*Mobil Layanan Umat Pimpinan Cabang*',
+    '*Muhammadiyah Wonotunggal*',
+    '━━━━━━━━━━━━━━━━━━',
+    `ID Permohonan : *${payload.id_permohonan}*`,
+    `Kategori Layanan : *${payload.kategori}*`,
+    '━━━━━━━━━━━━━━━━━━',
+    `Hari / Tanggal : *${payload.hari}, ${payload.tanggal}*`,
+    '',
+    '*DATA PENGGUNA*',
+    '```',
+    `Lembaga/Pengguna : ${payload.lembaga}`,
+    `Nama Pemohon     : ${payload.pemohon}`,
+    `No. WhatsApp     : ${payload.wa}`,
+    `Penyelenggara    : ${payload.penyelenggara}`,
+    `Keperluan        : ${payload.kegiatan}`,
+    `Jumlah Penumpang : ${payload.penumpang}`,
+    '```',
+    '',
+    '*RUTE & WAKTU*',
+    '```',
+    `Titik Jemput   : ${payload.berangkat}`,
+    `Tujuan         : ${payload.tujuan}`,
+    `Jam Berangkat  : ${payload.jam}`,
+    `Tiba           : ${payload.tiba}`,
+    `Keterangan     : ${payload.keterangan}`,
+    '```',
+    '━━━━━━━━━━━━━━━━━━',
+    '*PERNYATAAN PERSETUJUAN*',
+    'Saya menyatakan bahwa data yang saya isikan adalah benar dan saya menyetujui syarat serta ketentuan layanan Mobil Layanan Umat PCM Wonotunggal.',
+    '---------',
+    '_Pesan ini dikirim otomatis melalui sistem_',
+    '_Mobil Layanan Umat PCM Wonotunggal_'
+  ];
 
   window.open(
     `https://wa.me/6285117803676?text=${encodeURIComponent(lines.join('\n'))}`,
@@ -504,18 +579,33 @@ async function handleConfirmSend() {
   );
 
   /* =========================
-     3. RESET FORM
+     2. KIRIM KE SHEET (BG)
      ========================= */
+  fetch(
+    "https://script.google.com/macros/s/AKfycby_5GCjzYOy7vxuKb25tvPr953IQsGCIakNJfhbx3fDnIB3A76adK9QxXNr2WZIuWN4/exec",
+    {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }
+  ).catch(err => console.error('Sheet error:', err));
+
+  /* =========================
+     3. RESET FORM & UI
+     ========================= */
+  document.getElementById('popup').style.display = 'none';
   form.reset();
   document.getElementById('hari').value = '';
-  document.getElementById('popup').style.display = 'none';
 
-  isSubmitting = false;
-  btn.disabled = false;
+  btn.innerText = 'Terkirim';
+  setTimeout(() => {
+    btn.innerText = 'Kirim';
+    btn.disabled = false;
+    isSubmitting = false;
+  }, 1500);
 }
 </script>
 
-
+<script>
   // accessibility
   window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') confirmPopup.classList.remove('show'); });
 </script>
