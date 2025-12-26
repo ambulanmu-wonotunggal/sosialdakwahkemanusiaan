@@ -175,28 +175,22 @@
 
   .sponsor-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
   gap: 12px;
 }
 
 .sp-box {
-  background: #fff;
-  border-radius: 12px;
-  padding: 10px;
-  height: 70px;
-
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .sp-box img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 80%;
+  max-height: 80%;
   object-fit: contain;
-  }
+}
 
   .sp-box:hover {
     transform: translateY(-4px);
@@ -272,6 +266,8 @@
         <option value="Mobilisasi Kemanusiaan">Mobilisasi Kemanusiaan</option>
         <option value="Mobilisasi Sosial">Mobilisasi Sosial</option>
       </select>
+<label><i class="fa-solid fa-id-card"></i> ID Permohonan</label>
+<input type="text" id="id_permohonan" name="id_permohonan" readonly>
 
 <small id="infoKategori" style="color:#0e3f6b; display:block; margin-bottom:14px;"></small>
 
@@ -326,7 +322,7 @@
       <input type="time" name="tiba" required>
 
       <label><i class="fa-solid fa-people-group"></i> Jumlah Penumpang</label>
-      <input type="number" name="penumpang" min="1" max="7" required>
+      <input type="number" name="penumpang" required>
 
       <label><i class="fa-solid fa-clipboard-list"></i> Keterangan (opsional)</label>
       <textarea name="keterangan" rows="3" placeholder="Opsional"></textarea>
@@ -367,6 +363,7 @@
         <div class="sp-box"><img src="URL_LOGO_7.png"></div>
         <div class="sp-box"><img src="URL_LOGO_8.png"></div>
         <div class="sp-box"><img src="URL_LOGO_9.png"></div>
+        <div class="sp-box"><img src="URL_LOGO_10.png"></div>
       </div>
 
     </form>
@@ -387,102 +384,110 @@
     <button class="popup-btn" onclick="document.getElementById('popup').style.display='none'">Cek lagi</button>
   </div>
 </div>
+
 <script>
-// auto hari
-document.getElementById('tanggal').addEventListener('change', function(){
-  const d = new Date(this.value);
-  const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  document.getElementById('hari').value = hari[d.getDay()];
-});
+let isSubmitting = false;
 
-// tombol kirim → popup
-document.getElementById("btnPopup").addEventListener("click", function () {
-  const form = document.getElementById("formDakwah");
-  if (form.checkValidity()) {
-    document.getElementById("popup").style.display = "flex";
-  } else {
-    form.reportValidity();
-  }
-});
+function formatTanggalIndonesia(dateString) {
+  const bulan = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
+  const [year, month, day] = dateString.split('-');
+  return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year}`;
+}
 
-// konfirmasi kirim
-document.getElementById("confirmSend").addEventListener("click", function () {
+document.getElementById('confirmSend').addEventListener('click', handleConfirmSend);
 
-  const form = document.getElementById("formDakwah");
+async function handleConfirmSend() {
+
+  if (isSubmitting) return; // ⛔ cegah klik ganda
+  isSubmitting = true;
+
+  const btn = document.getElementById('confirmSend');
+  btn.disabled = true;
+
+  const form = document.getElementById('formDakwah');
   if (!form.checkValidity()) {
     form.reportValidity();
+    isSubmitting = false;
+    btn.disabled = false;
     return;
   }
 
   const f = new FormData(form);
 
-  const data = {
-    kategori: f.get("kategori_layanan"),
-    hari: document.getElementById("hari").value,
-    tanggal: f.get("tanggal"),
-    lembaga: f.get("lembaga_manual") || f.get("lembaga"),
-    pemohon: f.get("pemohon"),
-    nowa: f.get("nowa"),
-    kegiatan: f.get("kegiatan"),
-    penyelenggara: f.get("penyelenggara"),
-    berangkat: f.get("berangkat"),
-    tujuan: f.get("tujuan"),
-    jam: f.get("jam"),
-    tiba: f.get("tiba"),
-    penumpang: f.get("penumpang"),
-    keterangan: f.get("keterangan")
+  const payload = {
+    id_permohonan: f.get('id_permohonan'),
+    kategori: f.get('kategori_layanan'),
+    hari: document.getElementById('hari').value,
+    tanggal: formatTanggalIndonesia(f.get('tanggal')),
+    lembaga: f.get('lembaga_manual') || f.get('lembaga'),
+    pemohon: f.get('pemohon'),
+    wa: f.get('nowa'),
+    penyelenggara: f.get('penyelenggara'),
+    kegiatan: f.get('kegiatan'),
+    penumpang: f.get('penumpang'),
+    berangkat: f.get('berangkat'),
+    tujuan: f.get('tujuan'),
+    jam: f.get('jam'),
+    tiba: f.get('tiba'),
+    keterangan: f.get('keterangan') || '-'
   };
 
-  // kirim ke sheet (background)
-fetch("https://script.google.com/macros/s/AKfycbw5-lca7c3ySvjWSRa7ufhy2zraVhm6sXm6Fv1ppLtPK_AH4an9G_7fK7pfDBNfaNcz/exec", {
-  method: "POST",
-  body: new URLSearchParams(data)
-});
-function formatTanggalIndo(tgl) {
-  const bulan = [
-    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-  ];
+  /* =========================
+     1. KIRIM KE GOOGLE SHEET
+     ========================= */
+  try {
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycby_5GCjzYOy7vxuKb25tvPr953IQsGCIakNJfhbx3fDnIB3A76adK9QxXNr2WZIuWN4/exec",
+      {
+        method: "POST",
+        body: JSON.stringify(payload)
+      }
+    );
 
-  const d = new Date(tgl);
-  const tanggal = d.getDate();
-  const namaBulan = bulan[d.getMonth()];
-  const tahun = d.getFullYear();
+    const json = await res.json();
+    if (json.status !== 'success') throw new Error();
 
-  return `${tanggal} ${namaBulan} ${tahun}`;
-}
+  } catch (e) {
+    alert('Gagal menyimpan data.');
+    isSubmitting = false;
+    btn.disabled = false;
+    return;
+  }
 
-  // whatsapp
-const lines = [
+  /* =========================
+     2. BARU BUKA WHATSAPP
+     ========================= */
+  const lines = [
   '*FORM PERMOHONAN LAYANAN*',
   '*Mobil Layanan Umat Pimpinan Cabang*',
   '*Muhammadiyah Wonotunggal*',
   '━━━━━━━━━━━━━━━━━━',
-  `*Kategori Layanan :* *${payload.kategori}*`,
+  `ID Permohonan : *${payload.id_permohonan}*`,
+  `Kategori Layanan : *${payload.kategori}*`,
   '━━━━━━━━━━━━━━━━━━',
-  `*Hari / Tanggal   :* *${payload.hari}, ${formatTanggalIndo(payload.tanggal)}*`,
-  '━━━━━━━━━━━━━━━━━━',
-  '*DATA PENGAJUAN*',
+  `Hari / Tanggal : *${payload.hari}, ${payload.tanggal}*`,
+  '',
+  '*DATA PENGGUNA*',
   '```',
-  `Nama Lembaga / Pengguna : ${payload.lembaga}`,
-  `Nama Pemohon           : ${payload.pemohon}`,
-  `No. WhatsApp           : ${payload.nowa}`,
-  `Penyelenggara Kegiatan : ${payload.penyelenggara}`,
-  `Keperluan / Kegiatan   : ${payload.kegiatan}`,
+  `Lembaga/Pengguna : ${payload.lembaga}`,
+  `Nama Pemohon     : ${payload.pemohon}`,
+  `No. WhatsApp     : ${payload.wa}`,
+  `Penyelenggara    : ${payload.penyelenggara}`,
+  `Keperluan        : ${payload.kegiatan}`,
   `Jumlah Penumpang : ${payload.penumpang}`,
   '```',
-
+  '',
   '*RUTE & WAKTU*',
   '```',
-  `Titik Jemput     : ${payload.berangkat}`,
-  `Tujuan          : ${payload.tujuan}`,
-  `Jam Berangkat   : ${payload.jam}`,
-  `Perkiraan Tiba  : ${payload.tiba}`,
+  `Titik Jemput   : ${payload.berangkat}`,
+  `Tujuan         : ${payload.tujuan}`,
+  `Jam Berangkat  : ${payload.jam}`,
+  `Tiba           : ${payload.tiba}`,
+  `Keterangan     : ${payload.keterangan}`,
   '```',
-  '```',
-  `Keterangan       : ${payload.keterangan || '-'}`,
-  '```',
-
   '━━━━━━━━━━━━━━━━━━',
   '*PERNYATAAN PERSETUJUAN*',
   'Saya menyatakan bahwa data yang saya isikan adalah benar dan saya menyetujui syarat serta ketentuan layanan Mobil Layanan Umat PCM Wonotunggal.',
@@ -491,59 +496,107 @@ const lines = [
   '_Mobil Layanan Umat PCM Wonotunggal_'
 ];
 
+  document.getElementById('popup').style.display = 'none';
+
   window.open(
-    "https://wa.me/6285117803676?text=" + encodeURIComponent(pesan),
-    "_blank"
+    `https://wa.me/6285117803676?text=${encodeURIComponent(lines.join('\n'))}`,
+    '_blank'
   );
 
-  document.getElementById("popup").style.display = "none";
-});
+  /* =========================
+     3. RESET FORM
+     ========================= */
+  form.reset();
+  document.getElementById('hari').value = '';
+  document.getElementById('popup').style.display = 'none';
 
-// lembaga manual
-document.getElementById("lembaga").addEventListener("change", function () {
+  isSubmitting = false;
+  btn.disabled = false;
+}
+</script>
+
+
+  // accessibility
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') confirmPopup.classList.remove('show'); });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const lembaga = document.getElementById("lembaga");
   const box = document.getElementById("lembagaManualBox");
   const input = document.getElementById("lembaga_manual");
-  if (this.value === "lainnya") {
-    box.style.display = "block";
-    input.required = true;
-  } else {
-    box.style.display = "none";
-    input.required = false;
-    input.value = "";
-  }
-});
 
-// escape popup
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    document.getElementById('popup').style.display = 'none';
-  }
+  lembaga.addEventListener("change", function () {
+    if (this.value === "lainnya") {
+      box.style.display = "block";
+      input.required = true;
+    } else {
+      box.style.display = "none";
+      input.required = false;
+      input.value = "";
+    }
+  });
 });
 </script>
 <script>
-// deskripsi kategori layanan
-document.getElementById("kategori_layanan").addEventListener("change", function () {
+document.addEventListener("DOMContentLoaded", function () {
+  const kategori = document.getElementById("kategori_layanan");
   const info = document.getElementById("infoKategori");
 
-  if (this.value === "Mobilisasi Dakwah") {
-    info.innerText =
-      "Mobilisasi Dakwah digunakan untuk rapat organisasi, pengajian, dan kegiatan dakwah Muhammadiyah.";
-    info.style.display = "block";
-  } 
-  else if (this.value === "Mobilisasi Kemanusiaan") {
-    info.innerText =
-      "Mobilisasi Kemanusiaan digunakan untuk respon bencana, respon darurat, distribusi logistik, dan mitigasi.";
-    info.style.display = "block";
-  } 
-  else if (this.value === "Mobilisasi Sosial") {
-    info.innerText =
-      "Mobilisasi Sosial digunakan untuk kegiatan sosial non-medis seperti penyaluran bantuan, silaturahmi, jenguk orang sakit, dan layanan umat.";
-    info.style.display = "block";
-  } 
-  else {
-    info.style.display = "none";
-    info.innerText = "";
+  kategori.addEventListener("change", function () {
+    if (this.value === "Mobilisasi Dakwah") {
+      info.innerText = "Digunakan untuk rapat, kegiatan organisasi, pengajian, dan aktivitas dakwah.";
+    } 
+    else if (this.value === "Mobilisasi Kemanusiaan") {
+      info.innerText = "Digunakan untuk respon bencana, respon darurat, distribusi logistik, dan mitigasi.";
+    } 
+    else if (this.value === "Mobilisasi Sosial") {
+      info.innerText = "Digunakan untuk kegiatan sosial non-medis seperti penyaluran bantuan, silaturahmi, jenguk orang sakit, dan layanan umat lainnya.";
+    } 
+    else {
+      info.innerText = "";
+    }
+  });
+});
+</script>
+<script>
+document.getElementById("btnPopup").addEventListener("click", function () {
+  const form = document.getElementById("formDakwah");
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
   }
+
+  document.getElementById("popup").style.display = "flex";
+});
+</script>
+<script>
+function generateIdPermohonan() {
+  const kategori = document.getElementById("kategori_layanan").value;
+  if (!kategori) return;
+
+  let kodeKategori = "";
+  if (kategori.includes("Dakwah")) kodeKategori = "D";
+  else if (kategori.includes("Kemanusiaan")) kodeKategori = "K";
+  else if (kategori.includes("Sosial")) kodeKategori = "S";
+
+  const tahunBerdiri = "1912";
+  const tahunPertama = "17";
+  const tahunBerjalan = new Date().getFullYear().toString().slice(-2);
+  const random = Math.floor(1000 + Math.random() * 9000);
+
+  const id = `${tahunBerdiri}-${kodeKategori}-${tahunPertama}${tahunBerjalan}-${random}`;
+  document.getElementById("id_permohonan").value = id;
+}
+
+document.getElementById("kategori_layanan")
+  .addEventListener("change", generateIdPermohonan);
+</script>
+<script>
+document.getElementById('tanggal').addEventListener('change', function () {
+  const hariNama = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const tgl = new Date(this.value);
+  document.getElementById('hari').value = hariNama[tgl.getDay()];
 });
 </script>
 
