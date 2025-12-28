@@ -166,105 +166,41 @@
     line-height: 1.55;
   }
 
-.sponsor-title {
-  text-align: center;
-  font-weight: 600;
-  margin: 24px 0 12px;
-  letter-spacing: 0.5px;
+.sponsor-title{
+  text-align:center;        /* ⬅️ bikin tengah */
+  font-weight:600;
+  font-size:14px;
+  color:#6b7280;
+  margin-bottom:12px;
 }
 
-.sponsor-grid {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  overflow: hidden;
-  position: relative;
+/* grid sponsor */
+.sponsor-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  align-items:center;
 }
 
-.sponsor-grid::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 40px;
-  height: 100%;
-  background: linear-gradient(to left, #fff, transparent);
+/* kotak logo */
+.sponsor-item{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  height:52px;              /* ⬅️ DIPERKECIL */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px;
 }
 
-.sponsor-grid::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 40px;
-  height: 100%;
-  background: linear-gradient(to right, #fff, transparent);
-  z-index: 1;
+/* ukuran logo */
+.sponsor-item img{
+  max-height:28px;          /* ⬅️ LOGO KECIL */
+  max-width:100%;
+  object-fit:contain;
 }
 
-.sp-box {
-  flex: 0 0 auto;
-  animation: sponsor-scroll 30s linear infinite;
-}
-
-.sponsor-grid:hover .sp-box {
-  animation-play-state: paused;
-}
-
-.sp-box img {
-  height: 55px;
-  max-width: 140px;
-  object-fit: contain;
-  filter: grayscale(100%);
-  opacity: 0.85;
-  transition: all 0.3s ease;
-}
-
-.sp-box img:hover {
-  filter: grayscale(0%);
-  transform: scale(1.08);
-  opacity: 1;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .sp-box img {
-    height: 42px;
-    max-width: 110px;
-  }
-}
-
-@keyframes sponsor-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-1200px);
-  }
-}
-
-.sp-box {
-  aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sp-box img {
-  max-width: 80%;
-  max-height: 80%;
-  object-fit: contain;
-}
-  .sp-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    border-color: #71cfff;
-  }
-
-  .sp-box:hover img {
-    transform: scale(1.1);
-    opacity: 1;
-  }
 
   .popup-bg {
     display: none;
@@ -315,21 +251,6 @@
 .pedoman-link a:hover {
   text-decoration: underline;
 }
-  }
-.logo-list {
-  display: flex;
-  gap: 32px;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.logo-list img {
-  height: 48px;        /* samakan tinggi */
-  width: auto;
-  object-fit: contain;
-  filter: none;
-}
 </style>
 </head>
 <body>
@@ -339,7 +260,7 @@
 
   <h2>FORM PENGAJUAN LAYANAN</h2>
   <h1>GIAT SOSIAL, KEMANUSIAAN & DAKWAH</h1>
-  <h3>Mobil Layanan Umat PCM Wonotunggal</h3>
+  <h3>Mobil Layanan Umat Pimpinan Cabang Muhammadiyah Wonotunggal</h3>
 </header>
 
 <div class="container">
@@ -446,7 +367,7 @@
   <a href="https://s.id/pedomanmobillayananmu"
      target="_blank"
      rel="noopener">
-    📄 Baca Pedoman Layanan Mobil Layanan Umat
+    <strong>📄 Baca Pedoman Layanan Mobil Layanan Umat</strong>
   </a>
 </div>
 
@@ -552,7 +473,7 @@ function handleConfirmSend() {
   /* =========================
      1. BUKA WHATSAPP (INSTANT)
      ========================= */
-    const lines = [
+  const lines = [
     '*FORM PERMOHONAN LAYANAN*',
     '*MOBIL LAYANAN UMAT*',
     '*Muhammadiyah Wonotunggal*',
@@ -657,7 +578,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-</script>
 <script>
 // =============================
 // PICKER JAM 24 JAM (Versi Manual)
@@ -725,5 +645,3 @@ document.getElementById('tanggal').addEventListener('change', function () {
 
 </body>
 </html>
-
-
