@@ -315,38 +315,44 @@
     placeholder="Tulis nama lembaga / pengguna">
 </div>   
      
-      <label><i class="fa-solid fa-user"></i> Nama Pemohon</label>
-      <input type="text" name="pemohon" required>
+   <label><i class="fa-solid fa-user"></i> Nama Pemohon</label>
+<input type="text" name="pemohon" required>
 
-      <label><i class="fa-brands fa-whatsapp"></i> Nomor WhatsApp</label>
-      <input type="number" name="nowa" required placeholder="contoh : 6281234567891">
+<label><i class="fa-brands fa-whatsapp"></i> Nomor WhatsApp</label>
+<input
+  type="tel"
+  name="hp"
+  inputmode="numeric"
+  pattern="[0-9]+"
+  placeholder="contoh: 6281234567891"
+  required
+>
 
-      <label><i class="fa-solid fa-bullhorn"></i> Keperluan / Kegiatan</label>
-      <input type="text" name="kegiatan" placeholder="tulis keperluan atau kegiatan secara jelas" required>
+<label><i class="fa-solid fa-bullhorn"></i> Keperluan / Kegiatan</label>
+<input type="text" name="kegiatan" required>
 
-      <label><i class="fa-solid fa-users-line"></i> Penyelenggara Kegiatan</label>
-      <input type="text" name="penyelenggara" required>
+<label><i class="fa-solid fa-users-line"></i> Penyelenggara Kegiatan</label>
+<input type="text" name="penyelenggara" required>
 
-      <label><i class="fa-solid fa-location-dot"></i> Titik Pemberangkatan</label>
-      <input type="text" name="berangkat" required>
+<label><i class="fa-solid fa-location-dot"></i> Titik Pemberangkatan</label>
+<input type="text" name="berangkat" required>
 
-      <label><i class="fa-solid fa-map-pin"></i> Tujuan</label>
-      <input type="text" name="tujuan" required>
+<label><i class="fa-solid fa-map-pin"></i> Tujuan</label>
+<input type="text" name="tujuan" required>
 
-      <label for="jam">
-  <i class="fa-solid fa-clock"></i> Jam Berangkat
-</label>
+<label><i class="fa-solid fa-clock"></i> Jam Berangkat</label>
 <select id="jam" name="jam" required>
-  <option value="">— Pilih jam berangkat —</option>
+  <option value="">Pilih Jam Berangkat</option>
 </select>
 
-<label for="tiba">
-  <i class="fa-solid fa-hourglass-start"></i> Tiba di tujuan
+<div style="height:8px"></div>
+
+<label><i class="fa-solid fa-hourglass-start"></i> Tiba di tujuan</label>
 </label>
-<select id="tiba" name="tiba" required>
-  <option value="">— Pilih jam tiba —</option>
+<select id="tiba" name="tiba">
+  <option value="">Pilih Jam Tiba</option>
 </select>
-
+      
       <label><i class="fa-solid fa-people-group"></i> Jumlah Penumpang</label>
       <input type="number" name="penumpang" min="1" max= "7" placeholder="max 7 orang, jika lebih tulis di keterangan" required>
 
@@ -580,49 +586,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script>
-function generateTimeOptions(selectId, startHour = 5) {
-  const select = document.getElementById(selectId);
-  if (!select) return;
-
-  for (let i = 0; i < 24; i++) {
-    const h = (startHour + i) % 24;
-
-    for (let m = 0; m < 60; m += 15) {
-      const hh = String(h).padStart(2,'0');
-      const mm = String(m).padStart(2,'0');
-
-      const opt = document.createElement('option');
-      opt.value = `${hh}:${mm}`;
-      opt.textContent = `${hh}:${mm}`;
-      select.appendChild(opt);
-    }
-  }
-}
-
-generateTimeOptions('jam', 5);
-generateTimeOptions('tiba', 5);
-</script>
-<script>
-function timeToMinutes(t) {
-  const [h, m] = t.split(':').map(Number);
-  return h * 60 + m;
-}
-
-document.getElementById('jam').addEventListener('change', () => {
-  document.getElementById('tiba').value = '';
-});
-
-document.getElementById('tiba').addEventListener('change', function () {
-  const jam = document.getElementById('jam').value;
-  if (!jam) return;
-
-  if (timeToMinutes(this.value) <= timeToMinutes(jam)) {
-    alert('Jam tiba harus lebih besar dari jam berangkat');
-    this.value = '';
-  }
-});
-</script>
-<script>
 function generateIdPermohonan() {
   const kategori = document.getElementById("kategori_layanan").value;
   if (!kategori) return;
@@ -651,7 +614,47 @@ document.getElementById('tanggal').addEventListener('change', function () {
   document.getElementById('hari').value = hariNama[tgl.getDay()];
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ================= JAM & TIBA ================= */
+  const jam = document.getElementById('jam');
+  const tiba = document.getElementById('tiba');
+
+  function isiJam(select) {
+    select.innerHTML = '<option value="">Pilih Jam</option>';
+    for (let h = 5; h < 29; h++) {
+      const hour = h % 24;
+      for (let m = 0; m < 60; m += 15) {
+        const hh = String(hour).padStart(2, '0');
+        const mm = String(m).padStart(2, '0');
+        const opt = document.createElement('option');
+        opt.value = `${hh}:${mm}`;
+        opt.textContent = `${hh}:${mm}`;
+        select.appendChild(opt);
+      }
+    }
+  }
+
+  isiJam(jam);
+  isiJam(tiba);
+
+  jam.addEventListener('change', () => tiba.value = '');
+
+  tiba.addEventListener('change', () => {
+    if (!jam.value) return;
+    const [jh, jm] = jam.value.split(':').map(Number);
+    const [th, tm] = tiba.value.split(':').map(Number);
+    if (th * 60 + tm <= jh * 60 + jm) {
+      alert('Jam tiba harus lebih besar dari jam berangkat');
+      tiba.value = '';
+    }
+  });
+
+});
+</script>
 
 </body>
 </html>
+
 
