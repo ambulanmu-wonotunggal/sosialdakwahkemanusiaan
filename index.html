@@ -255,6 +255,35 @@
 .pedoman-link a:hover {
   text-decoration: underline;
 }
+/* ======================
+   SPONSOR RESPONSIVE
+   ====================== */
+@media (max-width: 768px) {
+  .sponsor-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sp-box img {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sponsor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sp-box {
+    padding: 8px 4px;
+  }
+
+  .sp-box img {
+    width: 42px;
+    height: 42px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -465,7 +494,7 @@ function handleConfirmSend() {
     tanggal: formatTanggalIndonesia(f.get('tanggal')),
     lembaga: f.get('lembaga_manual') || f.get('lembaga'),
     pemohon: f.get('pemohon'),
-    wa: f.get('nowa'),
+    wa: f.get('hp'),
     penyelenggara: f.get('penyelenggara'),
     kegiatan: f.get('kegiatan'),
     penumpang: f.get('penumpang'),
@@ -541,11 +570,28 @@ function handleConfirmSend() {
   }, 1500);
 }
 </script>
+<script>
+document.getElementById('btnPopup').addEventListener('click', function () {
+  const form = document.getElementById('formDakwah');
+
+  // validasi form dulu
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // tampilkan popup
+  document.getElementById('popup').style.display = 'flex';
+});
+</script>
 
 <script>
-  // accessibility
-  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') confirmPopup.classList.remove('show'); });
+const popup = document.getElementById('popup');
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') popup.style.display = 'none';
+});
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const lembaga = document.getElementById("lembaga");
@@ -656,5 +702,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </body>
 </html>
+
 
 
