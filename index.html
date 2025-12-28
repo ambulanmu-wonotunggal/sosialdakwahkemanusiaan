@@ -315,6 +315,21 @@
 .pedoman-link a:hover {
   text-decoration: underline;
 }
+  }
+.logo-list {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.logo-list img {
+  height: 48px;        /* samakan tinggi */
+  width: auto;
+  object-fit: contain;
+  filter: none;
+}
 </style>
 </head>
 <body>
@@ -537,40 +552,35 @@ function handleConfirmSend() {
   /* =========================
      1. BUKA WHATSAPP (INSTANT)
      ========================= */
-  const lines = [
+    const lines = [
     '*FORM PERMOHONAN LAYANAN*',
-    '*Mobil Layanan Umat Pimpinan Cabang*',
+    '*MOBIL LAYANAN UMAT*',
     '*Muhammadiyah Wonotunggal*',
     '━━━━━━━━━━━━━━━━━━',
     `ID Permohonan : *${payload.id_permohonan}*`,
     `Kategori Layanan : *${payload.kategori}*`,
     '━━━━━━━━━━━━━━━━━━',
     `Hari / Tanggal : *${payload.hari}, ${payload.tanggal}*`,
-    '',
+    '━━━━━━━━━━━━━━━━━━',
     '*DATA PENGGUNA*',
-    '```',
-    `Lembaga/Pengguna : ${payload.lembaga}`,
-    `Nama Pemohon     : ${payload.pemohon}`,
-    `No. WhatsApp     : ${payload.wa}`,
-    `Penyelenggara    : ${payload.penyelenggara}`,
-    `Keperluan        : ${payload.kegiatan}`,
-    `Jumlah Penumpang : ${payload.penumpang}`,
-    '```',
+    `> Pengguna : *${payload.lembaga}*`,
+    `> Pemohon : *${payload.pemohon}*`,
+    `> WhatsApp : *${payload.wa}*`,
+    `> Penyelenggara : *${payload.penyelenggara}*`,
+    `> Keperluan : *${payload.kegiatan}*`,
+    `> Penumpang : *${payload.penumpang}*`,
     '',
     '*RUTE & WAKTU*',
-    '```',
-    `Titik Jemput   : ${payload.berangkat}`,
-    `Tujuan         : ${payload.tujuan}`,
-    `Jam Berangkat  : ${payload.jam}`,
-    `Tiba           : ${payload.tiba}`,
-    `Keterangan     : ${payload.keterangan}`,
-    '```',
+    `> Jemput : *${payload.berangkat}*`,
+    `> Tujuan : *${payload.tujuan}*`,
+    `> Berangkat : *${payload.jam}*`,
+    `> Tiba : *${payload.tiba}*`,
+    `> Keterangan : *${payload.keterangan}*`,
     '━━━━━━━━━━━━━━━━━━',
     '*PERNYATAAN PERSETUJUAN*',
     'Saya menyatakan bahwa data yang saya isikan adalah benar dan saya menyetujui syarat serta ketentuan layanan Mobil Layanan Umat PCM Wonotunggal.',
     '---------',
-    '_Pesan ini dikirim otomatis melalui sistem_',
-    '_Mobil Layanan Umat PCM Wonotunggal_'
+    '_Pesan ini dikirim otomatis melalui sistem Mobil Layanan Umat PCM Wonotunggal_',
   ];
 
   window.open(
@@ -692,3 +702,4 @@ document.getElementById('tanggal').addEventListener('change', function () {
 
 </body>
 </html>
+
