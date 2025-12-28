@@ -333,11 +333,19 @@
       <label><i class="fa-solid fa-map-pin"></i> Tujuan</label>
       <input type="text" name="tujuan" required>
 
-      <label><i class="fa-solid fa-clock"></i> Jam Berangkat</label>
-      <input type="time" name="jam" required>
+      <label for="jam">
+  <i class="fa-solid fa-clock"></i> Jam Berangkat
+</label>
+<select id="jam" name="jam" required>
+  <option value="">— Pilih jam berangkat —</option>
+</select>
 
-      <label><i class="fa-solid fa-hourglass-start"></i> Tiba di tujuan</label>
-      <input type="time" name="tiba" required>
+<label for="tiba">
+  <i class="fa-solid fa-hourglass-start"></i> Tiba di tujuan
+</label>
+<select id="tiba" name="tiba" required>
+  <option value="">— Pilih jam tiba —</option>
+</select>
 
       <label><i class="fa-solid fa-people-group"></i> Jumlah Penumpang</label>
       <input type="number" name="penumpang" min="1" max= "7" placeholder="max 7 orang, jika lebih tulis di keterangan" required>
@@ -572,38 +580,46 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script>
-// =============================
-// PICKER JAM 24 JAM (Versi Manual)
-// =============================
-// Letakkan script ini di bagian <script> sebelum script pengiriman form atau di bawah DOMContentLoaded
+function generateTimeOptions(selectId, startHour = 5) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
 
-function createTimePicker(id) {
-  const input = document.getElementById(id);
-  if (!input) return;
-  input.setAttribute('type', 'time');
-  input.setAttribute('step', '300'); // step 5 menit
-  // opsional: default value bisa di set ke jam sekarang
-  const now = new Date();
-  const hh = now.getHours().toString().padStart(2,'0');
-  const mm = now.getMinutes().toString().padStart(2,'0');
-  input.value = `${hh}:${mm}`;
+  for (let i = 0; i < 24; i++) {
+    const h = (startHour + i) % 24;
+
+    for (let m = 0; m < 60; m += 15) {
+      const hh = String(h).padStart(2,'0');
+      const mm = String(m).padStart(2,'0');
+
+      const opt = document.createElement('option');
+      opt.value = `${hh}:${mm}`;
+      opt.textContent = `${hh}:${mm}`;
+      select.appendChild(opt);
+    }
+  }
 }
 
-// contoh pemanggilan
-createTimePicker('jam');     // id input jam berangkat
-createTimePicker('tiba');    // id input jam tiba
-
+generateTimeOptions('jam', 5);
+generateTimeOptions('tiba', 5);
 </script>
 <script>
-document.getElementById("btnPopup").addEventListener("click", function () {
-  const form = document.getElementById("formDakwah");
+function timeToMinutes(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
 
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
+document.getElementById('jam').addEventListener('change', () => {
+  document.getElementById('tiba').value = '';
+});
+
+document.getElementById('tiba').addEventListener('change', function () {
+  const jam = document.getElementById('jam').value;
+  if (!jam) return;
+
+  if (timeToMinutes(this.value) <= timeToMinutes(jam)) {
+    alert('Jam tiba harus lebih besar dari jam berangkat');
+    this.value = '';
   }
-
-  document.getElementById("popup").style.display = "flex";
 });
 </script>
 <script>
@@ -638,3 +654,4 @@ document.getElementById('tanggal').addEventListener('change', function () {
 
 </body>
 </html>
+
