@@ -659,6 +659,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script>
+// =============================
+// PICKER JAM 24 JAM (Versi Manual)
+// =============================
+// Letakkan script ini di bagian <script> sebelum script pengiriman form atau di bawah DOMContentLoaded
+
+function createTimePicker(id) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.setAttribute('type', 'time');
+  input.setAttribute('step', '300'); // step 5 menit
+  // opsional: default value bisa di set ke jam sekarang
+  const now = new Date();
+  const hh = now.getHours().toString().padStart(2,'0');
+  const mm = now.getMinutes().toString().padStart(2,'0');
+  input.value = `${hh}:${mm}`;
+}
+
+// contoh pemanggilan
+createTimePicker('jam');     // id input jam berangkat
+createTimePicker('tiba');    // id input jam tiba
+
+</script>
+<script>
 document.getElementById("btnPopup").addEventListener("click", function () {
   const form = document.getElementById("formDakwah");
 
@@ -702,4 +725,5 @@ document.getElementById('tanggal').addEventListener('change', function () {
 
 </body>
 </html>
+
 
