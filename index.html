@@ -166,41 +166,50 @@
     line-height: 1.55;
   }
 
-.sponsor-title{
-  text-align:center;        /* ⬅️ bikin tengah */
-  font-weight:600;
-  font-size:14px;
-  color:#6b7280;
-  margin-bottom:12px;
-}
+.sponsor-title {
+    text-align: center;
+    font-weight: 700;
+    margin: 25px 0 8px;
+    color: #0e3f6b;
+  }
 
-/* grid sponsor */
-.sponsor-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  align-items:center;
-}
+  .sponsor-grid {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    text-align: center;
+  }
 
-/* kotak logo */
-.sponsor-item{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:10px;
-  height:52px;              /* ⬅️ DIPERKECIL */
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:6px;
-}
+  .sp-box {
+    background: white;
+    border: 1px solid #c9ddff;
+    border-radius: 10px;
+    padding: 10px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.25s ease;
+  }
 
-/* ukuran logo */
-.sponsor-item img{
-  max-height:28px;          /* ⬅️ LOGO KECIL */
-  max-width:100%;
-  object-fit:contain;
-}
+  .sp-box img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    opacity: .9;
+    transition: 0.25s ease;
+  }
 
+  .sp-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    border-color: #71cfff;
+  }
+
+  .sp-box:hover img {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 
   .popup-bg {
     display: none;
@@ -236,11 +245,6 @@
   .popup-btn:hover {
     background: #005fcc;
   }
-.agreement {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
-}
 
 .pedoman-link a {
   font-size: 13px;
@@ -389,18 +393,6 @@
   <div class="sp-box"><img src="URL_LOGO_8.png" alt="Sponsor 8"></div>
   <div class="sp-box"><img src="URL_LOGO_9.png" alt="Sponsor 9"></div>
   <div class="sp-box"><img src="URL_LOGO_10.png" alt="Sponsor 10"></div>
-
-  <!-- DUPLIKAT UNTUK INFINITE LOOP -->
-  <div class="sp-box"><img src="URL_LOGO_1.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_2.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_3.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_4.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_5.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_6.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_7.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_8.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_9.png" alt=""></div>
-  <div class="sp-box"><img src="URL_LOGO_10.png" alt=""></div>
 </div>
 
 <div class="popup-bg" id="popup">
