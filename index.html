@@ -468,22 +468,16 @@ function formatTanggalIndonesia(dateString) {
 document.getElementById('confirmSend').addEventListener('click', handleConfirmSend);
 
 function handleConfirmSend() {
-
   if (isSubmitting) return;
+
   isSubmitting = true;
 
   const btn = document.getElementById('confirmSend');
+  const form = document.getElementById('formDakwah');
+
   btn.disabled = true;
   btn.innerText = 'Mengirim...';
 
-  const form = document.getElementById('formDakwah');
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    isSubmitting = false;
-    btn.disabled = false;
-    btn.innerText = 'Kirim';
-    return;
-  }
 
   const f = new FormData(form);
 
@@ -512,12 +506,12 @@ function handleConfirmSend() {
     '*FORM PERMOHONAN LAYANAN*',
     '*MOBIL LAYANAN UMAT*',
     '*Muhammadiyah Wonotunggal*',
-    '━━━━━━━━━━━━━━━━━━',
+    '--------------------',
     `ID Permohonan : *${payload.id_permohonan}*`,
     `Kategori Layanan : *${payload.kategori}*`,
-    '━━━━━━━━━━━━━━━━━━',
+    '--------------------',
     `Hari / Tanggal : *${payload.hari}, ${payload.tanggal}*`,
-    '━━━━━━━━━━━━━━━━━━',
+    '--------------------',
     '*DATA PENGGUNA*',
     `> Pengguna : *${payload.lembaga}*`,
     `> Pemohon : *${payload.pemohon}*`,
@@ -532,66 +526,53 @@ function handleConfirmSend() {
     `> Berangkat : *${payload.jam}*`,
     `> Tiba : *${payload.tiba}*`,
     `> Keterangan : *${payload.keterangan}*`,
-    '━━━━━━━━━━━━━━━━━━',
+    '--------------------',
     '*PERNYATAAN PERSETUJUAN*',
     'Saya menyatakan bahwa data yang saya isikan adalah benar dan saya menyetujui syarat serta ketentuan layanan Mobil Layanan Umat PCM Wonotunggal.',
     '---------',
     '_Pesan ini dikirim otomatis melalui sistem Mobil Layanan Umat PCM Wonotunggal_',
   ];
+ /* =========================
+     2. SIAPKAN WA
+     ========================= */
+  const waText = lines.join('\n');
+  const encodedText = encodeURIComponent(waText);
 
-  window.open(
-    `https://wa.me/6285111521912?text=${encodeURIComponent(lines.join('\n'))}`,
-    '_blank'
-  );
+  const waUrl = /Android|iPhone/i.test(navigator.userAgent)
+    ? `https://api.whatsapp.com/send?phone=6285111521912&text=${encodedText}`
+    : `https://wa.me/6285111521912?text=${encodedText}`;
+
+  window.location.href = waUrl;
 
   /* =========================
-     2. KIRIM KE SHEET (BG)
+     3. KIRIM SHEET (ONCE)
      ========================= */
-  fetch(
-    "https://script.google.com/macros/s/AKfycby_5GCjzYOy7vxuKb25tvPr953IQsGCIakNJfhbx3fDnIB3A76adK9QxXNr2WZIuWN4/exec",
-    {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    }
-  ).catch(err => console.error('Sheet error:', err));
 
-  /* =========================
-     3. RESET FORM & UI
-     ========================= */
-  document.getElementById('popup').style.display = 'none';
-  form.reset();
-  document.getElementById('hari').value = '';
-
-  btn.innerText = 'Terkirim';
   setTimeout(() => {
-    btn.innerText = 'Kirim';
-    btn.disabled = false;
-    isSubmitting = false;
+    fetch(
+      "https://script.google.com/macros/s/AKfycby_5GCjzYOy7vxuKb25tvPr953IQsGCIakNJfhbx3fDnIB3A76adK9QxXNr2WZIuWN4/exec",
+      {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      }
+    ).catch(err => console.error('Sheet error:', err));
   }, 1500);
+
+  document.getElementById('popup').style.display = 'none';
 }
 </script>
 <script>
 document.getElementById('btnPopup').addEventListener('click', function () {
   const form = document.getElementById('formDakwah');
 
-  // validasi form dulu
   if (!form.checkValidity()) {
     form.reportValidity();
     return;
   }
 
-  // tampilkan popup
   document.getElementById('popup').style.display = 'flex';
 });
 </script>
-
-<script>
-const popup = document.getElementById('popup');
-window.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape') popup.style.display = 'none';
-});
-</script>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const lembaga = document.getElementById("lembaga");
@@ -608,6 +589,12 @@ document.addEventListener("DOMContentLoaded", function () {
       input.value = "";
     }
   });
+});
+</script>
+<script>
+const popup = document.getElementById('popup');
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') popup.style.display = 'none';
 });
 </script>
 <script>
@@ -632,26 +619,44 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 <script>
+let permohonanId = sessionStorage.getItem('permohonan_id');
+
 function generateIdPermohonan() {
+  // jika sudah ada ID, jangan buat ulang
+  if (permohonanId) {
+    document.getElementById("id_permohonan").value = permohonanId;
+    return;
+  }
+
   const kategori = document.getElementById("kategori_layanan").value;
   if (!kategori) return;
 
-  let kodeKategori = "";
-  if (kategori.includes("Dakwah")) kodeKategori = "D";
-  else if (kategori.includes("Kemanusiaan")) kodeKategori = "K";
-  else if (kategori.includes("Sosial")) kodeKategori = "S";
+  let kode = '';
+  if (kategori.includes('Dakwah')) kode = 'D';
+  else if (kategori.includes('Kemanusiaan')) kode = 'K';
+  else if (kategori.includes('Sosial')) kode = 'S';
 
-  const tahunBerdiri = "1912";
-  const tahunPertama = "17";
+  const tahunBerdiri = '1912';
+  const tahunPertama = '17';
   const tahunBerjalan = new Date().getFullYear().toString().slice(-2);
-  const random = Math.floor(1000 + Math.random() * 9000);
+  const random4 = Math.floor(1000 + Math.random() * 9000);
 
-  const id = `${tahunBerdiri}-${kodeKategori}-${tahunPertama}${tahunBerjalan}-${random}`;
-  document.getElementById("id_permohonan").value = id;
+  permohonanId = `${kode}-${tahunBerdiri}-${tahunPertama}${tahunBerjalan}-${random4}`;
+  sessionStorage.setItem('permohonan_id', permohonanId);
+
+  document.getElementById("id_permohonan").value = permohonanId;
 }
 
+// generate saat kategori pertama kali dipilih
 document.getElementById("kategori_layanan")
   .addEventListener("change", generateIdPermohonan);
+
+// jaga-jaga kalau reload halaman
+document.addEventListener('DOMContentLoaded', () => {
+  if (permohonanId) {
+    document.getElementById("id_permohonan").value = permohonanId;
+  }
+});
 </script>
 <script>
 document.getElementById('tanggal').addEventListener('change', function () {
@@ -702,7 +707,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </body>
 </html>
-
 
 
 
